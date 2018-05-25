@@ -2,4 +2,4 @@
 
 A Roslyn analyzer that validates C# unit test names.
 
-[![Build Status](https://travis-ci.com/jakevictor/UnitTestNameAnalyzer.svg?branch=master)](https://travis-ci.com/jakevictor/UnitTestNameAnalyzer)
+[![Build status](https://ci.appveyor.com/api/projects/status/4q85r35yyghotsut?svg=true)](https://ci.appveyor.com/project/jakevictor/unittestnameanalyzer)
