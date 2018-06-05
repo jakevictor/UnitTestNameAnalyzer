@@ -2,8 +2,7 @@ image: Visual Studio 2017
 before_build:
   - nuget restore
 test_script:
-  - dotnet test UnitTestNameAnalyzer.Test.Unit "--logger:trx;LogFileName=TestResults.t
-rx"
+  - dotnet test UnitTestNameAnalyzer.Test.Unit "--logger:trx;LogFileName=TestResults.trx"
   - ps: |
       $wc = New-Object 'System.Net.WebClient'
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestResults\TestResults.trx))
