@@ -1,3 +1,10 @@
 image: Visual Studio 2017
 before_build:
-- cmd: nuget restore
+  - nuget restore
+test_script:
+  - '%USERPROFILE%\.nuget\packages\opencover\4.6.519\tools\OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test UnitTestNameAnalyzer.Test.Unit" -output:".\coverage.xml" -filter:"+[UnitTestNameAnalyzer*]* -[*.Test.*]*" -oldstyle'
+after_test:
+  - ps: |
+      $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
+      Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh
+      bash codecov.sh -f "coverage.xml"
