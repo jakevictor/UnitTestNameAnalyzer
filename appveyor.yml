@@ -5,7 +5,7 @@ test_script:
   - dotnet test UnitTestNameAnalyzer.Test.Unit "--logger:trx;LogFileName=TestResults.trx"
   - ps: |
       $wc = New-Object 'System.Net.WebClient'
-      $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestResults\TestResults.trx))
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\UnitTestNameAnalyzer.Test.Unit\TestResults\TestResults.trx))
   - '%USERPROFILE%\.nuget\packages\opencover\4.6.519\tools\OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test UnitTestNameAnalyzer.Test.Unit" -output:".\coverage.xml" -filter:"+[UnitTestNameAnalyzer*]* -[*.Test.*]*" -oldstyle'
   - ps: |
       $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
