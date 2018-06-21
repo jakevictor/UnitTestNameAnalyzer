@@ -1,34 +1,22 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using UnitTestNameAnalyzer.Rules;
 using UnitTestNameAnalyzer.Services;
 
-namespace UnitTestNameAnalyzer
+namespace UnitTestNameAnalyzer.Analyzers
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    [UsedImplicitly]
-    internal class ClassNameAnalyzer : DiagnosticAnalyzer
+    internal class ClassNameAnalyzer : IClassNameAnalyzer
     {
         private readonly IReadOnlyCollection<IClassNameRule> classNameRules;
-
         private readonly INamespaceService namespaceService;
-
         private readonly IAttributeService attributeService;
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+        public ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             classNameRules.Select(rule => rule.DiagnosticDescriptor).ToImmutableArray();
-
-        public ClassNameAnalyzer() : this(
-            CompositionRoot.GetClassNameRules(),
-            CompositionRoot.GetNamespaceService(),
-            CompositionRoot.GetAttributeService())
-        { }
 
         internal ClassNameAnalyzer(IReadOnlyCollection<IClassNameRule> classNameRules, INamespaceService namespaceService, IAttributeService attributeService)
         {
@@ -37,10 +25,7 @@ namespace UnitTestNameAnalyzer
             this.attributeService = attributeService;
         }
 
-        public override void Initialize(AnalysisContext context) =>
-            context.RegisterSyntaxNodeAction(AnalyzeClassDeclaration, SyntaxKind.ClassDeclaration);
-
-        private void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
+        public void AnalyzeClassName(SyntaxNodeAnalysisContext context)
         {
             var classDeclaration = (ClassDeclarationSyntax)context.Node;
 
@@ -55,7 +40,7 @@ namespace UnitTestNameAnalyzer
             }
         }
 
-        private bool IsUnitTestFixture(SyntaxNodeAnalysisContext classContext, ClassDeclarationSyntax classDeclaration) =>
+        private bool IsUnitTestFixture(SyntaxNodeAnalysisContext classContext, BaseTypeDeclarationSyntax classDeclaration) =>
             namespaceService.IsInUnitTestNamespace(classContext) && attributeService.HasAttribute(classDeclaration.AttributeLists, Constants.TestFixtureAttributeNames);
     }
 }
