@@ -9,6 +9,7 @@ namespace UnitTestNameAnalyzer
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     [UsedImplicitly]
+    [ExcludeFromCodeCoverage]
     internal class MethodDeclarationAnalyzer : DiagnosticAnalyzer
     {
         private readonly IMethodNameAnalyzer methodNameAnalyzer;

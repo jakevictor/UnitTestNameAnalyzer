@@ -6,7 +6,7 @@ test_script:
   - ps: |
       $wc = New-Object 'System.Net.WebClient'
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\UnitTestNameAnalyzer.Test.Unit\TestResults\TestResults.trx))
-  - '%USERPROFILE%\.nuget\packages\opencover\4.6.519\tools\OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test UnitTestNameAnalyzer.Test.Unit" -output:".\coverage.xml" -filter:"+[UnitTestNameAnalyzer*]* -[*.Test.*]*" -oldstyle'
+  - '%USERPROFILE%\.nuget\packages\opencover\4.6.519\tools\OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test UnitTestNameAnalyzer.Test.Unit" -output:".\coverage.xml" -filter:"+[UnitTestNameAnalyzer*]* -[*.Test.*]*" -excludebyattribute:"*ExcludeFromCodeCoverageAttribute" -oldstyle'
   - ps: |
       $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
       Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh

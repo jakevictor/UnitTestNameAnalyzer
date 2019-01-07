@@ -5,6 +5,7 @@ using UnitTestNameAnalyzer.Services;
 
 namespace UnitTestNameAnalyzer
 {
+    [ExcludeFromCodeCoverage]
     internal static class CompositionRoot
     {
         internal static IClassNameAnalyzer GetClassNameAnalyzer() =>
